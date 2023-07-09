@@ -11,10 +11,10 @@ import { Register } from './components/Register/Register';
 function App() {
   return (
     <div id="box">
-    <Header/>
-  {/* Main Content */}
-  <main id="main-content"></main>
-    <Home/>
+      <Header/>
+      <main id="main-content">
+         <Home/>
+      </main>
     <Login/>
     <Register/>
     <Create/>
