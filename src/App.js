@@ -1,3 +1,6 @@
+import { Routes, Route } from 'react-router-dom';
+
+
 import './App.css';
 import { Catalog } from './components/Catalog/Catalog';
 import { Create } from './components/Create/Create';
@@ -13,14 +16,16 @@ function App() {
     <div id="box">
       <Header/>
       <main id="main-content">
-         <Home/>
+        <Routes>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/catalog" element={<Catalog/>}/>
+            <Route path="/create" element={<Create/>}/>
+            <Route path="/login" element={<Login/>}/>
+            <Route path="/register" element={<Register/>}/>
+            <Route path="/edit" element={<Edit/>}/>
+            <Route path="/details" element={<Details/>}/>
+        </Routes> 
       </main>
-    <Login/>
-    <Register/>
-    <Create/>
-    <Edit/>
-    <Details/>
-    <Catalog/>
 </div>
   );
 }
