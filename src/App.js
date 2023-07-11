@@ -30,11 +30,11 @@ function App() {
         <Routes>
             <Route path="/" element={<Home games={games}/>}/>
             <Route path="/catalog" element={<Catalog games={games}/>}/>
+            <Route path="/catalog/:gameId" element={<Details games={games}/>}/>
             <Route path="/create" element={<Create/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/edit" element={<Edit/>}/>
-            <Route path="/details" element={<Details/>}/>
         </Routes> 
       </main>
     </div>
