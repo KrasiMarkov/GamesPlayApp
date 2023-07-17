@@ -48,7 +48,7 @@ export const Details = ({games, addComment}) => {
         <h2>Comments:</h2>
         <ul>
           {game.comments?.map(x => 
-          <li className="comment">
+          <li  key={x._id} className="comment">
             <p>{x}.</p>
           </li>)}
         </ul>
