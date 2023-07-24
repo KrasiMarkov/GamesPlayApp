@@ -8,6 +8,10 @@ export const Details = ({games, addComment}) => {
     username: '',
     comment: ''
   });
+  const [error, setError] = useState({
+    username: '',
+    comment: ''
+  });
 
   const game = games.find(x => x._id == gameId);
 
@@ -28,6 +32,25 @@ export const Details = ({games, addComment}) => {
     setComment(state => ({
       ...state,
       [e.target.name]: [e.target.value]
+    }));
+  }
+
+  const validateUsername = (e) => {
+
+    let username = e.target.value;
+    let errorMessage = '';
+
+    if(username.length < 3){
+      errorMessage = 'Username must be longer than 3 symbols.';
+    }
+    else if(username.length > 15){
+      errorMessage = 'Username must be lower than 15 symbols.';
+    }
+
+    setError(state => ({
+      ...state,
+      username: errorMessage
+      
     }));
   }
 
@@ -77,7 +100,9 @@ export const Details = ({games, addComment}) => {
           name="username"
           value={comment.username}
           onChange={onChange}
+          onBlur={validateUsername}
         />
+        {error.username && <span style={{color: 'red'}}>{error.username}</span>}
         <textarea
           name="comment"
           placeholder="Comment......"
