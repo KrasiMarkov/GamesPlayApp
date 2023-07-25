@@ -54,6 +54,25 @@ export const Details = ({games, addComment}) => {
     }));
   }
 
+  const validateComment = (e) => {
+
+    let comment = e.target.value;
+
+    let errorMessage = '';
+
+    if(comment.length < 2){
+      errorMessage = 'Comment must be longer than 1 symbols.';
+    }
+    else if(comment.length > 50){
+      errorMessage = 'Comment must be lower than 50 symbols.';
+    }
+
+    setError(state => ({
+      ...state,
+      comment: errorMessage
+    }));
+  }
+
 
     return(
         <section id="game-details">
@@ -102,13 +121,17 @@ export const Details = ({games, addComment}) => {
           onChange={onChange}
           onBlur={validateUsername}
         />
+        <br/>
         {error.username && <span style={{color: 'red'}}>{error.username}</span>}
         <textarea
           name="comment"
           placeholder="Comment......"
           value={comment.comment}
+          onBlur={validateComment}
           onChange={onChange}
         />
+        <br/>
+        {error.comment && <span style={{color: 'red'}}>{error.comment}</span>}
         <input
           className="btn submit"
           type="submit"
