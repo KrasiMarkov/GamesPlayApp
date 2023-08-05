@@ -121,8 +121,7 @@ export const Details = ({games, addComment}) => {
           onChange={onChange}
           onBlur={validateUsername}
         />
-        <br/>
-        {error.username && <span style={{color: 'red'}}>{error.username}</span>}
+        {error.username && <div style={{color: 'red'}}>{error.username}</div>}
         <textarea
           name="comment"
           placeholder="Comment......"
@@ -130,8 +129,7 @@ export const Details = ({games, addComment}) => {
           onBlur={validateComment}
           onChange={onChange}
         />
-        <br/>
-        {error.comment && <span style={{color: 'red'}}>{error.comment}</span>}
+        {error.comment && <div style={{color: 'red'}}>{error.comment}</div>}
         <input
           className="btn submit"
           type="submit"

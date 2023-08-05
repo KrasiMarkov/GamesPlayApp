@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import * as gameService from './services/gameService';
 import uniqid from 'uniqid';
+import { AuthContext } from './contexts/AuthContext';
 
 import './App.css';
 import { Catalog } from './components/Catalog/Catalog';
@@ -17,6 +18,7 @@ function App() {
 
   const [games, setGames] = useState([]);
   const navigate = useNavigate();
+  const [auth, setAuth] = useState({});
 
   useEffect(() => {
         gameService.getAll()
@@ -24,6 +26,10 @@ function App() {
               setGames(result);
            });
   }, []);
+
+  const userLogin = (authData) => {
+    setAuth(authData);
+  }
 
   const addComment = (gameId, comment) => {
       
@@ -54,7 +60,8 @@ function App() {
   }
 
   return (
-    <div id="box">
+    <AuthContext.Provider value={{user: auth, userLogin}}>
+       <div id="box">
       <Header/>
       <main id="main-content">
         <Routes>
@@ -68,6 +75,7 @@ function App() {
         </Routes> 
       </main>
     </div>
+    </AuthContext.Provider>
   );
 }
 
