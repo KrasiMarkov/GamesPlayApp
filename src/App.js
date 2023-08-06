@@ -14,12 +14,13 @@ import { Home } from './components/Home/Home';
 import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
 import { Logout } from './components/Logout/Logout';
+import { useLocalStorage } from './hooks/useLocalStorage';
 
 function App() {
 
   const [games, setGames] = useState([]);
   const navigate = useNavigate();
-  const [auth, setAuth] = useState({});
+  const [auth, setAuth] = useLocalStorage('auth', {});
 
   useEffect(() => {
         gameService.getAll()
