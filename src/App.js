@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import * as gameService from './services/gameService';
 import uniqid from 'uniqid';
 import { AuthContext } from './contexts/AuthContext';
+import { GameContext } from './contexts/GameContext';
 
 import './App.css';
 import { Catalog } from './components/Catalog/Catalog';
@@ -56,10 +57,7 @@ function App() {
 
       setGames(state => [
         ...state,
-        {
-          ...gameData,
-          _id: uniqid()
-        }
+         gameData
       ]);
 
       navigate('/catalog');
@@ -70,16 +68,18 @@ function App() {
        <div id="box">
       <Header/>
       <main id="main-content">
+        <GameContext.Provider value={{addGame}}>
         <Routes>
             <Route path="/" element={<Home games={games}/>}/>
             <Route path="/catalog" element={<Catalog games={games}/>}/>
             <Route path="/catalog/:gameId" element={<Details games={games} addComment={addComment}/>}/>
-            <Route path="/create" element={<Create addGame={addGame}/>}/>
+            <Route path="/create" element={<Create/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/logout" element={<Logout/>}/>
             <Route path="/edit" element={<Edit/>}/>
         </Routes> 
+        </GameContext.Provider>
       </main>
     </div>
     </AuthContext.Provider>

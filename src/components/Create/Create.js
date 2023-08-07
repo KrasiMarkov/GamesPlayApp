@@ -1,4 +1,10 @@
-export const Create = ({addGame}) => {
+import { useContext } from "react";
+import * as gameService from "../../services/gameService";
+import { GameContext } from "../../contexts/GameContext";
+
+export const Create = () => {
+
+  const { addGame } = useContext(GameContext);
 
 
   const onSubmit = (e) => {
@@ -7,7 +13,11 @@ export const Create = ({addGame}) => {
 
     const gameData = Object.fromEntries(new FormData(e.target));
 
-    addGame(gameData);
+    gameService.create(gameData)
+        .then(result => {
+          addGame(result);
+        });
+
 
   }
 
