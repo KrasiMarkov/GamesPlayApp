@@ -16,7 +16,7 @@ const request = async (method, url, data) => {
     if(method === 'GET'){
         buildRequest = fetch(url, { headers });
     }else{
-        buildRequest= fetch(url, {
+        buildRequest = fetch(url, {
             method,
             headers: {
                 ...headers,

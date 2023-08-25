@@ -63,12 +63,16 @@ function App() {
       navigate('/catalog');
   }
 
+  const editGame = (gameId, gameData) => {
+    setGames(state => state.map(x => x._id === gameId ? gameData : x));
+  }
+
   return (
     <AuthContext.Provider value={{user: auth, userLogin, userLogout}}>
        <div id="box">
       <Header/>
       <main id="main-content">
-        <GameContext.Provider value={{addGame}}>
+        <GameContext.Provider value={{addGame, editGame}}>
         <Routes>
             <Route path="/" element={<Home games={games}/>}/>
             <Route path="/catalog" element={<Catalog games={games}/>}/>
@@ -77,7 +81,7 @@ function App() {
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/logout" element={<Logout/>}/>
-            <Route path="/edit" element={<Edit/>}/>
+            <Route path="/games/:gameId/edit" element={<Edit/>}/>
         </Routes> 
         </GameContext.Provider>
       </main>
