@@ -1,19 +1,28 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import * as gameService from "../../services/gameService"; 
 
-export const Details = ({games, addComment}) => {
+export const Details = ({ addComment }) => {
 
-  const {gameId} = useParams();
+  const { gameId } = useParams();
+  const [currentGame, setCurrentGame] = useState({});
   const [comment, setComment] = useState({
     username: '',
     comment: ''
-  });
+  }); 
   const [error, setError] = useState({
     username: '',
     comment: ''
   });
 
-  const game = games.find(x => x._id == gameId);
+  useEffect(() => {
+      gameService.getOne(gameId)
+        .then(result => {
+            setCurrentGame(result);
+        })
+  }, []);
+
+  
 
 
 
@@ -79,22 +88,22 @@ export const Details = ({games, addComment}) => {
     <h1>Game Details</h1>
     <div className="info-section">
       <div className="game-header"> 
-        <img className="game-img" src={game.imageUrl}/>
-        <h1>{game.title}</h1>
-        <span className="levels">Max Level: {game.maxLevel}</span>
-        <p className="type">{game.category}</p>
+        <img className="game-img" src={currentGame.imageUrl}/>
+        <h1>{currentGame.title}</h1>
+        <span className="levels">Max Level: {currentGame.maxLevel}</span>
+        <p className="type">{currentGame.category}</p>
       </div>
-      <p className="text">{game.summary}</p>
+      <p className="text">{currentGame.summary}</p>
       {/* Bonus ( for Guests and Users ) */}
       <div className="details-comments">
         <h2>Comments:</h2>
         <ul>
-          {game.comments?.map(x => 
+          {currentGame.comments?.map(x => 
           <li  key={x._id} className="comment">
             <p>{x}.</p>
           </li>)}
         </ul>
-        {!game.comments &&  
+        {!currentGame.comments &&  
              <p className="no-comment">No comments.</p>}
         
       </div>
