@@ -1,7 +1,7 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import * as gameService from './services/gameService';
-import { AuthContext, AuthProvider } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 import { GameContext } from './contexts/GameContext';
 
 import './App.css';
@@ -12,7 +12,7 @@ import { Edit } from './components/Edit/Edit';
 import { Header } from './components/Header/Header';
 import { Home } from './components/Home/Home';
 import { Login } from './components/Login/Login';
-import { Register } from './components/Register/Register';
+import Register from './components/Register/Register';
 import { Logout } from './components/Logout/Logout';
 
 function App() {
