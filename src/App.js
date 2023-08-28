@@ -1,8 +1,7 @@
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import * as gameService from './services/gameService';
-import uniqid from 'uniqid';
-import { AuthContext } from './contexts/AuthContext';
+import { AuthContext, AuthProvider } from './contexts/AuthContext';
 import { GameContext } from './contexts/GameContext';
 
 import './App.css';
@@ -15,13 +14,11 @@ import { Home } from './components/Home/Home';
 import { Login } from './components/Login/Login';
 import { Register } from './components/Register/Register';
 import { Logout } from './components/Logout/Logout';
-import { useLocalStorage } from './hooks/useLocalStorage';
 
 function App() {
 
   const [games, setGames] = useState([]);
   const navigate = useNavigate();
-  const [auth, setAuth] = useLocalStorage('auth', {});
 
   useEffect(() => {
         gameService.getAll()
@@ -30,13 +27,6 @@ function App() {
            });
   }, []);
 
-  const userLogin = (authData) => {
-    setAuth(authData);
-  }
-
-  const userLogout = () => {
-    setAuth({});
-  }
 
   const addComment = (gameId, comment) => {
       
@@ -68,7 +58,7 @@ function App() {
   }
 
   return (
-    <AuthContext.Provider value={{user: auth, userLogin, userLogout}}>
+    <AuthProvider>
        <div id="box">
       <Header/>
       <main id="main-content">
@@ -86,7 +76,7 @@ function App() {
         </GameContext.Provider>
       </main>
     </div>
-    </AuthContext.Provider>
+    </AuthProvider>
   );
 }
 
