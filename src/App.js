@@ -1,8 +1,8 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from "react";
-import * as gameService from './services/gameService';
+import { Routes, Route} from 'react-router-dom';
+
+
 import { AuthProvider } from './contexts/AuthContext';
-import { GameContext } from './contexts/GameContext';
+import { GameProvider } from './contexts/GameContext';
 
 import './App.css';
 import { Catalog } from './components/Catalog/Catalog';
@@ -17,63 +17,25 @@ import { Logout } from './components/Logout/Logout';
 
 function App() {
 
-  const [games, setGames] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-        gameService.getAll()
-           .then(result => {
-              setGames(result);
-           });
-  }, []);
-
-
-  const addComment = (gameId, comment) => {
-      
-    setGames(state => {
-      const game = state.find(x => x._id == gameId);
-
-      const comments = game.comments || [];
-      comments.push(comment);
-      
-      return [
-        ...state.filter(x => x._id !== gameId),
-        {...game, comments}
-      ]
-    });
-  }
-
-  const addGame = (gameData) => {
-
-      setGames(state => [
-        ...state,
-         gameData
-      ]);
-
-      navigate('/catalog');
-  }
-
-  const editGame = (gameId, gameData) => {
-    setGames(state => state.map(x => x._id === gameId ? gameData : x));
-  }
+  
 
   return (
     <AuthProvider>
        <div id="box">
       <Header/>
       <main id="main-content">
-        <GameContext.Provider value={{addGame, editGame}}>
+        <GameProvider>
         <Routes>
-            <Route path="/" element={<Home games={games}/>}/>
-            <Route path="/catalog" element={<Catalog games={games}/>}/>
-            <Route path="/catalog/:gameId" element={<Details addComment={addComment}/>}/>
+            <Route path="/" element={<Home/>}/>
+            <Route path="/catalog" element={<Catalog/>}/>
+            <Route path="/catalog/:gameId" element={<Details/>}/>
             <Route path="/create" element={<Create/>}/>
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/logout" element={<Logout/>}/>
             <Route path="/games/:gameId/edit" element={<Edit/>}/>
         </Routes> 
-        </GameContext.Provider>
+        </GameProvider>
       </main>
     </div>
     </AuthProvider>
