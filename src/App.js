@@ -15,9 +15,7 @@ import { Login } from './components/Login/Login';
 import Register from './components/Register/Register';
 import { Logout } from './components/Logout/Logout';
 
-function App() {
-
-  
+function App() { 
 
   return (
     <AuthProvider>
