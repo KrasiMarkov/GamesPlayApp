@@ -1,89 +1,45 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect} from "react";
 import { Link, useParams } from "react-router-dom";
 import * as gameService from "../../services/gameService"; 
 import { GameContext } from "../../contexts/GameContext";
+import * as commentService from "../../services/commentService";
 
 export const Details = () => {
 
+  const { addComment, fetchGameDetails, selectGame } = useContext(GameContext);
   const { gameId } = useParams();
-  const { addComment } = useContext(GameContext);
-  const [currentGame, setCurrentGame] = useState({});
-  const [comment, setComment] = useState({
-    username: '',
-    comment: ''
-  }); 
-  const [error, setError] = useState({
-    username: '',
-    comment: ''
-  });
-
-  useEffect(() => {
-      gameService.getOne(gameId)
-        .then(result => {
-            setCurrentGame(result);
-        })
-  }, []);
-
   
+  
+  const currentGame = selectGame(gameId);
+  
+  
+  useEffect(() => {
+    (async () => {
+      const gameDatails = await gameService.getOne(gameId);
+      const gameComments = await commentService.getByGameId(gameId);
 
+      fetchGameDetails(gameId, { ...gameDatails, comments: gameComments.map(x => `${x.user.email}: ${x.text}`) });
+    })();
+      
+  }, []);
 
 
   const addCommentHandler = (e) => {
      
     e.preventDefault();
 
-    const result = `${comment.username}: ${comment.comment}`;
+    const formData = new FormData(e.target);
 
-    addComment(gameId, result);
+    const comment = formData.get('comment');
+
+    commentService.create(gameId, comment)
+       .then(result => {
+         addComment(gameId, comment);
+       });
+
+   
 
   }
-
-  const onChange = (e) => {
-
-    setComment(state => ({
-      ...state,
-      [e.target.name]: [e.target.value]
-    }));
-  }
-
-  const validateUsername = (e) => {
-
-    let username = e.target.value;
-    let errorMessage = '';
-
-    if(username.length < 3){
-      errorMessage = 'Username must be longer than 3 symbols.';
-    }
-    else if(username.length > 15){
-      errorMessage = 'Username must be lower than 15 symbols.';
-    }
-
-    setError(state => ({
-      ...state,
-      username: errorMessage
-      
-    }));
-  }
-
-  const validateComment = (e) => {
-
-    let comment = e.target.value;
-
-    let errorMessage = '';
-
-    if(comment.length < 2){
-      errorMessage = 'Comment must be longer than 1 symbols.';
-    }
-    else if(comment.length > 50){
-      errorMessage = 'Comment must be lower than 50 symbols.';
-    }
-
-    setError(state => ({
-      ...state,
-      comment: errorMessage
-    }));
-  }
-
 
     return(
         <section id="game-details">
@@ -101,7 +57,7 @@ export const Details = () => {
         <h2>Comments:</h2>
         <ul>
           {currentGame.comments?.map(x => 
-          <li  key={x._id} className="comment">
+          <li key={x} className="comment">
             <p>{x}.</p>
           </li>)}
         </ul>
@@ -124,23 +80,13 @@ export const Details = () => {
     <article className="create-comment">
       <label>Add new comment:</label>
       <form className="form" onSubmit={addCommentHandler}>
-      <input
-          type="text"
-          placeholder="John Doe"
-          name="username"
-          value={comment.username}
-          onChange={onChange}
-          onBlur={validateUsername}
-        />
-        {error.username && <div style={{color: 'red'}}>{error.username}</div>}
+        
         <textarea
           name="comment"
           placeholder="Comment......"
-          value={comment.comment}
-          onBlur={validateComment}
-          onChange={onChange}
+          
         />
-        {error.comment && <div style={{color: 'red'}}>{error.comment}</div>}
+        
         <input
           className="btn submit"
           type="submit"
