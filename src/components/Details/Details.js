@@ -1,13 +1,14 @@
 import { useContext, useEffect} from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import * as gameService from "../../services/gameService"; 
 import { GameContext } from "../../contexts/GameContext";
 import * as commentService from "../../services/commentService";
 
 export const Details = () => {
 
-  const { addComment, fetchGameDetails, selectGame } = useContext(GameContext);
+  const { addComment, fetchGameDetails, selectGame, gameRemove } = useContext(GameContext);
   const { gameId } = useParams();
+  const navigate = useNavigate();
   
   
   const currentGame = selectGame(gameId);
@@ -41,6 +42,22 @@ export const Details = () => {
 
   }
 
+  const gameDeleteHandler = () => {
+
+    const confirmation = window.confirm('Are you sure want to delete this game?');
+
+    if(confirmation){
+       
+      gameService.remove(gameId)
+       .then(() => {
+          gameRemove(gameId);
+          navigate('/catalog');
+       })
+    }
+
+    
+  }
+
     return(
         <section id="game-details">
     <h1>Game Details</h1>
@@ -70,9 +87,9 @@ export const Details = () => {
         <Link to={`/games/${gameId}/edit`} className="button">
           Edit
         </Link>
-        <Link to={""} className="button">
+        <button  className="button" onClick={gameDeleteHandler}>
           Delete
-        </Link>
+        </button>
       </div>
     </div>
     {/* Bonus */}
