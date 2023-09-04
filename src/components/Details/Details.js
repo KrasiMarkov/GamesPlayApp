@@ -3,15 +3,20 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import * as gameService from "../../services/gameService"; 
 import { GameContext } from "../../contexts/GameContext";
 import * as commentService from "../../services/commentService";
+import { useAuthContext } from "../../contexts/AuthContext";
+
 
 export const Details = () => {
 
   const { addComment, fetchGameDetails, selectGame, gameRemove } = useContext(GameContext);
   const { gameId } = useParams();
+  const { user } = useAuthContext();
   const navigate = useNavigate();
   
   
   const currentGame = selectGame(gameId);
+
+  const isOwner = currentGame._ownerId === user._id;
   
   
   useEffect(() => {
@@ -82,15 +87,16 @@ export const Details = () => {
              <p className="no-comment">No comments.</p>}
         
       </div>
-      {/* Edit/Delete buttons ( Only for creator of this game )  */}
-      <div className="buttons">
-        <Link to={`/games/${gameId}/edit`} className="button">
-          Edit
-        </Link>
-        <button  className="button" onClick={gameDeleteHandler}>
-          Delete
-        </button>
-      </div>
+      {isOwner && 
+         <div className="buttons">
+         <Link to={`/games/${gameId}/edit`} className="button">
+           Edit
+         </Link>
+         <button  className="button" onClick={gameDeleteHandler}>
+           Delete
+         </button>
+       </div>
+      }
     </div>
     {/* Bonus */}
     {/* Add Comment ( Only for logged-in users, which is not creators of the current game ) */}
