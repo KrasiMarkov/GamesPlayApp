@@ -15,6 +15,7 @@ import { Login } from './components/Login/Login';
 import Register from './components/Register/Register';
 import { Logout } from './components/Logout/Logout';
 import { PrivateGuard } from './components/common/PrivateGuard';
+import { GameOwner } from './components/common/GameOwner';
 
 function App() { 
 
@@ -32,7 +33,10 @@ function App() {
             <Route element={<PrivateGuard/>}>
                 <Route path="/create" element={<Create/>}/>
                 <Route path="/logout" element={<Logout/>}/>
-                <Route path="/games/:gameId/edit" element={<Edit/>}/>
+                <Route element={<GameOwner/>}>
+                   <Route path="/games/:gameId/edit" element={<Edit/>}/>
+                </Route>
+                
             </Route>
             <Route path="/register" element={<Register/>}/>
         </Routes> 
